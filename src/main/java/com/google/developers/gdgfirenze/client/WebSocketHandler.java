@@ -6,7 +6,7 @@ public interface WebSocketHandler {
 
 	void onClose();
 
-	void onError();
+	void onError(String error);
 
 	void onMessage(Message msg);
 

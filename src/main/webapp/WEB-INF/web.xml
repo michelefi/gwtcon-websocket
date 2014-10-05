@@ -5,6 +5,10 @@
 
 <web-app>
 
+	<listener>
+		<listener-class>com.google.developers.gdgfirenze.server.InitListener</listener-class>
+	</listener>
+
   <!-- Servlets -->
 
   <!-- Default page to serve -->
