@@ -50,3 +50,15 @@ body {
 	border-radius: 25px;
     padding: 30px 30px;
 }
+
+.error {
+	color: #D94D48;
+}
+
+.info {
+	color: #6082BF;
+}
+
+.data {
+	color: #4C4C4C;
+}

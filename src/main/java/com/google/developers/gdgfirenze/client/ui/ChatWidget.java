@@ -49,18 +49,21 @@ public class ChatWidget extends Composite implements ChatView {
 
 	@Override
 	public void addMessage(Message msg) {
-		int numRows = table.getRowCount();
-		table.setWidget(numRows, 0, new Label(timeFormat.format(msg.getTime())));
-		table.setWidget(numRows, 1, new Label(msg.getUsername()));
-		table.setWidget(numRows, 2, new Label(msg.getData()));
+		table.insertRow(0);
+		Label info = new Label(timeFormat.format(msg.getTime()) + " " + msg.getUsername() + " - ");
+		info.setStyleName("info");
+		Label data = new Label(msg.getData());
+		data.setStyleName("data");
+		table.setWidget(0, 0, info);
+		table.setWidget(0, 1, data);
 	}
 
 	@Override
 	public void setInfoMessage(String message, boolean error) {
 		if(error) {
-			infolabel.getElement().getStyle().setColor("red");
+			infolabel.setStyleName("error");
 		} else {
-			infolabel.getElement().getStyle().setColor("blue");
+			infolabel.setStyleName("info");
 		}
 		infolabel.setText(message);
 	}
@@ -88,5 +91,6 @@ public class ChatWidget extends Composite implements ChatView {
 		message.setTime(new Date());
 		message.setUsername("username");
 		presenter.sendMessage(message);
+		inputText.setText("");
 	}
 }
