@@ -1,5 +1,6 @@
 package com.google.developers.gdgfirenze.server;
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,8 +24,7 @@ public class ChatWebSocketServer {
 
   
   @OnMessage
-  public String onMessage(String message, Session session) {
-    String result = message;
+  public void onMessage(String message, Session session) {
     try {
       final ServerSerializationStreamReader streamReader =
           new ServerSerializationStreamReader(Thread.currentThread().getContextClassLoader(),
@@ -38,12 +38,15 @@ public class ChatWebSocketServer {
           new ServerSerializationStreamWriter(new CustomSerializationPolicy());
 
       serverSerializationStreamWriter.writeObject(messageDto);
-      result = serverSerializationStreamWriter.toString();
-//      logger.log(Level.INFO, messageDto.getId() + messageDto.getType());
-    } catch (final SerializationException e) {
-      logger.log(Level.WARNING, "SerializationException", e);
+      String result = serverSerializationStreamWriter.toString();
+      for (Session s : session.getOpenSessions()) {
+          if (s.isOpen()) {
+            s.getBasicRemote().sendText(result);
+          }
+      }
+    } catch (final SerializationException | IOException e) {
+      logger.log(Level.WARNING, "Error on web socket server", e);
     }
-    return result;
   }
 
   @OnOpen

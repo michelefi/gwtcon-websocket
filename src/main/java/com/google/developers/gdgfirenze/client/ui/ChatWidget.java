@@ -4,19 +4,13 @@ import java.util.Date;
 
 import com.google.developers.gdgfirenze.shared.Message;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -67,7 +61,7 @@ public class ChatWidget extends Composite implements ChatView {
 	public void addMessage(Message msg) {
 		table.insertRow(0);
 		Label info = new Label(timeFormat.format(msg.getTime()) + " "
-				+ msg.getUsername() + " - ");
+				+ msg.getUsername() + " ");
 		info.setStyleName("info");
 		Label data = new Label(msg.getData());
 		data.setStyleName("data");
