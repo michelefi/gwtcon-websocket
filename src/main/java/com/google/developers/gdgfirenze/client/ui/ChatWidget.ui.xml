@@ -2,13 +2,13 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
-	
 	</ui:style>
 	<g:DockLayoutPanel unit='PX'>
 		<g:north size='45'>
 			<g:HTMLPanel>
 				<g:TextBox ui:field="inputText" />
 				<g:Button ui:field="sendButton">Send</g:Button>
+				<g:Label ui:field="infolabel" />
 			</g:HTMLPanel>
 		</g:north>
 		<g:center>

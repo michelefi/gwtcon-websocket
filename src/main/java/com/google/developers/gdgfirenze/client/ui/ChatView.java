@@ -11,5 +11,7 @@ public interface ChatView {
 	void addMessage(Message message);
 	
 	void setPresenter(Presenter presenter);
+	
+	void setInfoMessage(String message, boolean error);
 
 }

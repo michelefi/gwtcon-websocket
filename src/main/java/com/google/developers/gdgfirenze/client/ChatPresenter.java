@@ -23,13 +23,11 @@ public class ChatPresenter implements ChatView.Presenter, WebSocketHandler {
 
 	@Override
 	public void onClose() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onError(String error) {
-		// TODO Auto-generated method stub
+		view.setInfoMessage(error,true);
 
 	}
 
@@ -41,8 +39,7 @@ public class ChatPresenter implements ChatView.Presenter, WebSocketHandler {
 
 	@Override
 	public void onOpen() {
-		// TODO Auto-generated method stub
-
+		view.setInfoMessage("Web Socket Open",false);
 	}
 
 }

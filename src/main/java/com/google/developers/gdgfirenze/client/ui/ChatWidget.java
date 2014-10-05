@@ -21,18 +21,14 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class ChatWidget extends Composite implements ChatView {
 
-	private static ChatWidgetUiBinder uiBinder = GWT
-			.create(ChatWidgetUiBinder.class);
-
 	interface ChatWidgetUiBinder extends UiBinder<Widget, ChatWidget> {
 	}
 
-	public ChatWidget() {
-		initWidget(uiBinder.createAndBindUi(this));
-	}
-	
-	private DateTimeFormat timeFormat = DateTimeFormat.getFormat(PredefinedFormat.TIME_MEDIUM);
+	private static ChatWidgetUiBinder uiBinder = GWT
+			.create(ChatWidgetUiBinder.class);
 
+	private DateTimeFormat timeFormat = DateTimeFormat.getFormat(PredefinedFormat.TIME_MEDIUM);
+	
 	@UiField
 	TextBox inputText;
 
@@ -42,7 +38,37 @@ public class ChatWidget extends Composite implements ChatView {
 	@UiField
 	FlexTable table;
 
+	@UiField
+	Label infolabel;
+	
 	private Presenter presenter;
+
+	public ChatWidget() {
+		initWidget(uiBinder.createAndBindUi(this));
+	}
+
+	@Override
+	public void addMessage(Message msg) {
+		int numRows = table.getRowCount();
+		table.setWidget(numRows, 0, new Label(timeFormat.format(msg.getTime())));
+		table.setWidget(numRows, 1, new Label(msg.getUsername()));
+		table.setWidget(numRows, 2, new Label(msg.getData()));
+	}
+
+	@Override
+	public void setInfoMessage(String message, boolean error) {
+		if(error) {
+			infolabel.getElement().getStyle().setColor("red");
+		} else {
+			infolabel.getElement().getStyle().setColor("blue");
+		}
+		infolabel.setText(message);
+	}
+
+	@Override
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
+	}
 
 	@UiHandler("sendButton")
 	void handleClick(ClickEvent e) {
@@ -62,18 +88,5 @@ public class ChatWidget extends Composite implements ChatView {
 		message.setTime(new Date());
 		message.setUsername("username");
 		presenter.sendMessage(message);
-	}
-
-	@Override
-	public void addMessage(Message msg) {
-		int numRows = table.getRowCount();
-		table.setWidget(numRows, 0, new Label(timeFormat.format(msg.getTime())));
-		table.setWidget(numRows, 1, new Label(msg.getUsername()));
-		table.setWidget(numRows, 2, new Label(msg.getData()));
-	}
-
-	@Override
-	public void setPresenter(Presenter presenter) {
-		this.presenter = presenter;
 	}
 }
