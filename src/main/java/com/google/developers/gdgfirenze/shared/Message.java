@@ -3,8 +3,9 @@ package com.google.developers.gdgfirenze.shared;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Message implements Serializable{
+public class Message implements Serializable {
 
+	private static final long serialVersionUID = -2974784212373773166L;
 	private String data;
 	private String username;
 	private Date time;
@@ -32,6 +33,5 @@ public class Message implements Serializable{
 	public void setTime(Date time) {
 		this.time = time;
 	}
-
 
 }

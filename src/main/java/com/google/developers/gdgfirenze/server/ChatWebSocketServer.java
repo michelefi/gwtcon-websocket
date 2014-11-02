@@ -10,7 +10,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import com.google.developers.gdgfirenze.server.serialization.CustomSerializationPolicy;
+import com.google.developers.gdgfirenze.server.serialization.SimpleSerializationPolicy;
 import com.google.developers.gdgfirenze.server.serialization.CustomSerializationPolicyProvider;
 import com.google.developers.gdgfirenze.shared.Message;
 import com.google.gwt.user.client.rpc.SerializationException;
@@ -35,7 +35,7 @@ public class ChatWebSocketServer {
       final Message messageDto = (Message) streamReader.readObject();
 
       final ServerSerializationStreamWriter serverSerializationStreamWriter =
-          new ServerSerializationStreamWriter(new CustomSerializationPolicy());
+          new ServerSerializationStreamWriter(new SimpleSerializationPolicy());
 
       serverSerializationStreamWriter.writeObject(messageDto);
       String result = serverSerializationStreamWriter.toString();
