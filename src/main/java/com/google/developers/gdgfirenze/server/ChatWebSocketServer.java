@@ -20,38 +20,49 @@ import com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter;
 @ServerEndpoint(value = "/chat")
 public class ChatWebSocketServer {
 
-  private static Logger logger = Logger.getLogger(ChatWebSocketServer.class.getName());
+	private static Logger logger = Logger.getLogger(ChatWebSocketServer.class
+			.getName());
 
-  
-  @OnMessage
-  public void onMessage(String message, Session session) {
-    try {
-      final ServerSerializationStreamReader streamReader =
-          new ServerSerializationStreamReader(Thread.currentThread().getContextClassLoader(),
-              new CustomSerializationPolicyProvider());
-      // Filling stream reader with data
-      streamReader.prepareToRead(message);
-      // Reading deserialized object from the stream
-      final Message messageDto = (Message) streamReader.readObject();
+	@OnMessage
+	public void onMessage(String message, Session session) {
+		try {
+			final Message messageDto = deserializeMessage(message);
+			String result = serializeMessage(messageDto);
+			for (Session s : session.getOpenSessions()) {
+				if (s.isOpen()) {
+					s.getBasicRemote().sendText(result);
+				}
+			}
+		} catch (final SerializationException | IOException e) {
+			logger.log(Level.WARNING, "Error on web socket server", e);
+		}
+	}
 
-      final ServerSerializationStreamWriter serverSerializationStreamWriter =
-          new ServerSerializationStreamWriter(new SimpleSerializationPolicy());
+	@OnOpen
+	public void onOpen(Session session, EndpointConfig conf) {
+		logger.log(Level.INFO, "Commection open for:" + session.getId());
+	}
 
-      serverSerializationStreamWriter.writeObject(messageDto);
-      String result = serverSerializationStreamWriter.toString();
-      for (Session s : session.getOpenSessions()) {
-          if (s.isOpen()) {
-            s.getBasicRemote().sendText(result);
-          }
-      }
-    } catch (final SerializationException | IOException e) {
-      logger.log(Level.WARNING, "Error on web socket server", e);
-    }
-  }
+	private Message deserializeMessage(String data)
+			throws SerializationException {
+		final ServerSerializationStreamReader streamReader = new ServerSerializationStreamReader(
+				Thread.currentThread().getContextClassLoader(),
+				new CustomSerializationPolicyProvider());
+		// Filling stream reader with data
+		streamReader.prepareToRead(data);
+		// Reading deserialized object from the stream
+		final Message message = (Message) streamReader.readObject();
+		return message;
+	}
 
-  @OnOpen
-  public void onOpen(Session session, EndpointConfig conf) {
-    logger.log(Level.INFO, "Commection open for:" + session.getId());
-  }
+	private String serializeMessage(final Message messageDto)
+			throws SerializationException {
+		final ServerSerializationStreamWriter serverSerializationStreamWriter = new ServerSerializationStreamWriter(
+				new SimpleSerializationPolicy());
+
+		serverSerializationStreamWriter.writeObject(messageDto);
+		String result = serverSerializationStreamWriter.toString();
+		return result;
+	}
 
 }
