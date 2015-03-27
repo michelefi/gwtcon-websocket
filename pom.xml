@@ -91,7 +91,7 @@
 				<!-- Plugin configuration. There are many available options, see gwt-maven-plugin 
 					documentation at codehaus.org -->
 				<configuration>
-					<runTarget>gwtcon-websocket.html</runTarget>
+					<runTarget>GwtConWebsocket.html</runTarget>
 					<hostedWebapp>${webappDirectory}</hostedWebapp>
 				</configuration>
 			</plugin>
